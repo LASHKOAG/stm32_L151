@@ -56,6 +56,9 @@ static void MX_GPIO_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 void get_sleep();
+void blink();
+
+int8_t FLAG_INTERRUPT_EVENT = 0;
 /* USER CODE END 0 */
 
 /**
@@ -88,6 +91,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
+  	  blink();
   	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
   	  HAL_Delay (5000);
   	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET);
@@ -104,6 +108,14 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if(FLAG_INTERRUPT_EVENT){
+		  FLAG_INTERRUPT_EVENT=0;
+		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
+		  HAL_Delay (5000);
+		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET);
+		  HAL_Delay (1000);
+		  blink();
+	  }
 //	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
 //	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_0, GPIO_PIN_SET);
 //	  HAL_Delay (5000);
@@ -202,7 +214,8 @@ static void MX_GPIO_Init(void)
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin== GPIO_PIN_13) {
-		HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
+		//HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
+		FLAG_INTERRUPT_EVENT=1;
 	}else{
 		__NOP();
 		}
@@ -219,6 +232,17 @@ void get_sleep()
 	  HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
 	  HAL_ResumeTick();
 }
+
+void blink()
+{
+    for(int8_t i=0; i<6; ++i){
+    	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
+    	HAL_Delay (500);
+    	HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET);
+    	HAL_Delay (500);
+    }
+}
+
 /* USER CODE END 4 */
 
 /**
