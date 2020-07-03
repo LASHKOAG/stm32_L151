@@ -55,7 +55,7 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void get_sleep();
 /* USER CODE END 0 */
 
 /**
@@ -91,9 +91,11 @@ int main(void)
   	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
   	  HAL_Delay (5000);
   	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET);
-  HAL_SuspendTick();
-  HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
-  HAL_ResumeTick();
+
+  	  get_sleep();
+//  HAL_SuspendTick();
+//  HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+//  HAL_ResumeTick();
   /* USER CODE END 2 */
  
  
@@ -209,6 +211,13 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
 //	} else{
 //	__NOP();
 //	}
+}
+
+void get_sleep()
+{
+	  HAL_SuspendTick();
+	  HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
+	  HAL_ResumeTick();
 }
 /* USER CODE END 4 */
 
