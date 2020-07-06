@@ -92,9 +92,9 @@ int main(void)
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
   	  blink();
-  	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
-  	  HAL_Delay (5000);
-  	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET);
+//  	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
+//  	  HAL_Delay (5000);
+//  	  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET);
 
   	  get_sleep();
 //  HAL_SuspendTick();
@@ -108,7 +108,15 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(FLAG_INTERRUPT_EVENT){
+	  if( HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_0) == GPIO_PIN_SET ) {
+	      // на выводе PB12 высокий уровень, кнопка отжата
+		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
+	  }else{
+		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_RESET);
+	  }
+
+	  //if(FLAG_INTERRUPT_EVENT){
+	  if(0){
 		  FLAG_INTERRUPT_EVENT=0;
 		  HAL_GPIO_WritePin(GPIOC, GPIO_PIN_1, GPIO_PIN_SET);
 		  HAL_Delay (5000);
